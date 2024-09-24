@@ -1,8 +1,8 @@
 import './App.css'
 import {useState} from "react";
 import {response} from "./assets/components/RickAndMortyResponse.ts";
-import RickAndMortyComponent from "./assets/components/RickAndMortyComponent/RickAndMortyComponent.tsx";
 import {RickAndMortyCharacter} from "./assets/components/RickAndMortyCharacter.ts";
+import RickAndMortyGallery from "./assets/components/RickAndMortyGallery/RickAndMortyGallery.tsx";
 
 function App() {
 /*
@@ -22,14 +22,18 @@ function App() {
   )
   */
 
-    const [characterList, setCharacterList] = useState<RickAndMortyCharacter[]>(response)
-    console.log("State: " + characterList)
+    const [filter, setfilter] = useState<string>("")
+
+    const filteredList: RickAndMortyCharacter[] = response.filter(
+        character => character.name.toLowerCase().includes(filter.toLowerCase())
+    )
 
   return (
     <div>
         <h1>Rick And Morty Data</h1>
-        <RickAndMortyComponent characterList={characterList}/>
-
+        <input type="text" id={"myInput"} placeholder={"Search a character..."} onChange={(e) => setfilter(e.target.value)}/>
+        {filteredList.length > 0 ? <p><RickAndMortyGallery characterList={filteredList}/></p> :
+            <p>No characters found</p>}
     </div>
   )
 }
